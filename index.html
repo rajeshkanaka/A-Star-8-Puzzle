@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<!--
+   ______                            __
+  / ____/___  ____ ___  ____  __  __/ /____  _____
+ / /   / __ \/ __ `__ \/ __ \/ / / / __/ _ \/ ___/
+/ /___/ /_/ / / / / / / /_/ / /_/ / /_/  __/ /
+\____/\____/_/ /_/ /_/ .___/\__,_/\__/\___/_/
+                    /_/
+        Created with Perplexity Computer
+        https://www.perplexity.ai/computer
+-->
+<meta name="generator" content="Perplexity Computer">
+<meta name="author" content="Perplexity Computer">
+<meta property="og:see_also" content="https://www.perplexity.ai/computer">
+<link rel="author" href="https://www.perplexity.ai/computer">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A* Algorithm — 8 Puzzle Simulator | SPPU AI Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo-area">
+        <svg class="logo-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-label="A* Puzzle Logo">
+          <rect x="2" y="2" width="28" height="28" rx="4" stroke="currentColor" stroke-width="2"/>
+          <line x1="12" y1="2" x2="12" y2="30" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+          <line x1="22" y1="2" x2="22" y2="30" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+          <line x1="2" y1="12" x2="30" y2="12" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+          <line x1="2" y1="22" x2="30" y2="22" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+          <text x="16" y="18" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor">A*</text>
+        </svg>
+        <div>
+          <h1 class="site-title">A* Algorithm — 8 Puzzle Problem</h1>
+          <p class="site-subtitle">SPPU | Third Year | Sem VI | 310253 — Artificial Intelligence</p>
+        </div>
+      </div>
+      <button data-theme-toggle aria-label="Switch to dark mode">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="main">
+    <!-- Left Column: Puzzle Grids -->
+    <section class="puzzle-section">
+      <div class="grids-row">
+        <div class="grid-container">
+          <h2 class="grid-label">Current State</h2>
+          <div class="puzzle-grid" id="currentGrid"></div>
+          <div class="cost-display" id="currentCost"></div>
+        </div>
+        <div class="arrow-between">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </div>
+        <div class="grid-container">
+          <h2 class="grid-label">Goal State</h2>
+          <div class="puzzle-grid" id="goalGrid"></div>
+          <div class="cost-display goal-cost">Target: h(n) = 0</div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="controls">
+        <button class="btn btn-primary" id="btnNextStep">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Next Step
+          <kbd>→</kbd>
+        </button>
+        <button class="btn btn-accent" id="btnSolve">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5,3 19,12 5,21"/></svg>
+          Solve Completely
+          <kbd>Enter</kbd>
+        </button>
+        <button class="btn btn-secondary" id="btnReset">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1,4 1,10 7,10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+          Reset
+          <kbd>R</kbd>
+        </button>
+      </div>
+
+      <!-- Step Counter -->
+      <div class="step-counter" id="stepCounter">
+        Step <span id="stepNum">0</span> of <span id="totalSteps">?</span>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+
+      <!-- Explanation Panel -->
+      <div class="explanation-panel" id="explanationPanel">
+        <div class="explanation-header">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <span>What's happening?</span>
+        </div>
+        <div class="explanation-text" id="explanationText">
+          Press <strong>Next Step (→)</strong> to begin the A* algorithm, or <strong>Solve Completely (Enter)</strong> to see the full solution animated.
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Column: Algorithm State -->
+    <aside class="state-panel">
+      <!-- Formula Card -->
+      <div class="info-card formula-card">
+        <h3>A* Evaluation Function</h3>
+        <div class="formula">f(n) = g(n) + h(n)</div>
+        <div class="formula-legend">
+          <div><span class="legend-dot g-dot"></span> <strong>g(n)</strong> = moves from start to current state</div>
+          <div><span class="legend-dot h-dot"></span> <strong>h(n)</strong> = misplaced tiles (heuristic estimate to goal)</div>
+          <div><span class="legend-dot f-dot"></span> <strong>f(n)</strong> = total estimated cost</div>
+        </div>
+      </div>
+
+      <!-- OPEN List -->
+      <div class="info-card">
+        <h3>
+          <span class="list-badge open-badge">OPEN</span> List
+          <span class="list-count" id="openCount">0</span>
+        </h3>
+        <p class="list-desc">States evaluated but not yet expanded. We pick the one with the smallest f(n).</p>
+        <div class="list-content" id="openList">
+          <div class="list-empty">Will be populated when algorithm starts</div>
+        </div>
+      </div>
+
+      <!-- CLOSED List -->
+      <div class="info-card">
+        <h3>
+          <span class="list-badge closed-badge">CLOSED</span> List
+          <span class="list-count" id="closedCount">0</span>
+        </h3>
+        <p class="list-desc">States already visited and expanded. We don't revisit these.</p>
+        <div class="list-content" id="closedList">
+          <div class="list-empty">Will be populated as states are visited</div>
+        </div>
+      </div>
+
+      <!-- Move History -->
+      <div class="info-card">
+        <h3>Solution Path</h3>
+        <div class="move-history" id="moveHistory">
+          <div class="list-empty">Solution path will appear here</div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="footer">
+    <p>SPPU — Third Year — Semester VI — Subject Code: 310253 — Artificial Intelligence</p>
+    <a href="https://www.perplexity.ai/computer" target="_blank" rel="noopener noreferrer">Created with Perplexity Computer</a>
+  </footer>
+
+  <script src="./app.js"></script>
+<script data-pplx-inline-edit>
+(function(){
+  if(window===window.top)return;
+  function inlineAll(orig,clone){
+    if(orig.nodeType!==1)return;
+    try{
+      var cs=getComputedStyle(orig);
+      var t='';
+      for(var i=0;i<cs.length;i++){t+=cs[i]+':'+cs.getPropertyValue(cs[i])+';';}
+      clone.style.cssText=t;
+    }catch(e){}
+    var oc=orig.children,cc=clone.children;
+    for(var j=0;j<oc.length&&j<cc.length;j++){inlineAll(oc[j],cc[j]);}
+  }
+  function stripExternal(clone){
+    var imgs=clone.querySelectorAll('img');
+    for(var i=0;i<imgs.length;i++){
+      var s=imgs[i].getAttribute('src');
+      if(s&&!s.startsWith('data:'))imgs[i].removeAttribute('src');
+    }
+    var all=clone.querySelectorAll('*');
+    for(var i=0;i<all.length;i++){
+      var st=all[i].style.cssText;
+      if(st&&st.indexOf('url(')>=0){
+        all[i].style.cssText=st.replace(/url\(["']?(?!data:)[^)"']*["']?\)/gi,'none');
+      }
+    }
+  }
+  window.addEventListener('message',function(e){
+    if(!e.data||e.data.type!=='INLINE_EDIT_CAPTURE_REQUEST')return;
+    var scrollX=window.scrollX||window.pageXOffset||0;
+    var scrollY=window.scrollY||window.pageYOffset||0;
+    var w=window.innerWidth,h=window.innerHeight;
+    try{
+      var clone=document.documentElement.cloneNode(true);
+      var rm=clone.querySelectorAll('script,link[rel="stylesheet"],style');
+      for(var i=0;i<rm.length;i++){rm[i].remove();}
+      inlineAll(document.documentElement,clone);
+      stripExternal(clone);
+      var html=new XMLSerializer().serializeToString(clone);
+      var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'">'
+        +'<foreignObject width="100%" height="100%">'
+        +'<div xmlns="http://www.w3.org/1999/xhtml" style="width:'+w+'px;height:'+h+'px;overflow:hidden">'
+        +'<div style="transform:translate(-'+scrollX+'px,-'+scrollY+'px);transform-origin:top left">'
+        +html+'</div></div></foreignObject></svg>';
+      var svgUrl='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+      var img=new Image();
+      img.onload=function(){
+        var c=document.createElement('canvas');c.width=w;c.height=h;
+        c.getContext('2d').drawImage(img,0,0);
+        window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:c.toDataURL('image/png'),scrollX:scrollX,scrollY:scrollY},'*');
+      };
+      img.onerror=function(){
+        window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:null,scrollX:scrollX,scrollY:scrollY},'*');
+      };
+      img.src=svgUrl;
+    }catch(err){
+      window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:null,scrollX:scrollX,scrollY:scrollY},'*');
+    }
+  });
+})();
+</script></body>
+</html>
