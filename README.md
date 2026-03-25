@@ -11,6 +11,9 @@
 
 **SPPU · Third Year · Semester VI · Subject Code: 310253 · Artificial Intelligence**
 
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Click_Here-blue?style=for-the-badge)](https://rajeshkanaka.github.io/A-Star-8-Puzzle/)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/rajeshkanaka/A-Star-8-Puzzle)
+
 <br/>
 
 ```
@@ -99,8 +102,8 @@ open index.html
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/a-star-8-puzzle-simulator.git
-cd a-star-8-puzzle-simulator
+git clone https://github.com/rajeshkanaka/A-Star-8-Puzzle.git
+cd A-Star-8-Puzzle
 
 # Serve with any static file server
 npx -y http-server . -p 8080
