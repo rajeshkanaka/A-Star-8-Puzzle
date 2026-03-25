@@ -41,7 +41,7 @@ This project is a **fully interactive, browser-based simulator** that visualizes
 
 Instead of just reading about OPEN lists, CLOSED lists, and heuristic functions in a textbook, this simulator lets you **watch the algorithm think**, step by step, with rich visual feedback and real-time explanations.
 
-> **Built for** students of Savitribai Phule Pune University (SPPU) as part of the Third Year, Semester VI lab coursework for **Artificial Intelligence (310253)**.
+> **Built for** students of Savitribai Phule Pune University (SPPU) **Artificial Intelligence**.
 
 ---
 
@@ -250,9 +250,9 @@ This project is open source and available under the [MIT License](LICENSE).
 
 <div align="center">
 
-**Made with ❤️ for SPPU AI Lab**
+**Made with ❤️ for SPPU AI**
 
-*Third Year · Semester VI · Subject Code: 310253 · Artificial Intelligence*
+*Subject Code: 310253 · Artificial Intelligence*
 
 <br/>
 
