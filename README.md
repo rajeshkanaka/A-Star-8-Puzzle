@@ -147,7 +147,7 @@ f(n) = g(n) + h(n)
 │  1. Place initial state in OPEN list            │
 │  2. Pick state with lowest f(n) from OPEN       │
 │  3. Move it to CLOSED list                      │
-│  4. If it's the GOAL → Done! 🎉                │
+│  4. If it's the GOAL → Done! 🎉                 │
 │  5. Generate neighbors (slide tiles)            │
 │  6. For each neighbor not in CLOSED:            │
 │     → Calculate g(n), h(n), f(n)                │
