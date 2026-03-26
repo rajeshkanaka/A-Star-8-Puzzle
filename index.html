@@ -46,7 +46,206 @@
     </div>
   </header>
 
-  <main class="main">
+  <!-- ===== Learn the Basics Section ===== -->
+  <section class="concepts-section" id="conceptsSection">
+    <button class="concepts-toggle" id="conceptsToggle" aria-expanded="true">
+      <span class="concepts-toggle-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </span>
+      <span class="concepts-toggle-text">Learn the Basics First</span>
+      <span class="concepts-toggle-hint">(click to expand)</span>
+      <svg class="concepts-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+
+    <div class="concepts-body" id="conceptsBody">
+      <p class="concepts-intro">Master these core concepts before running the simulation. Each card builds on the previous one.</p>
+
+      <!-- Card 1: What is the 8-Puzzle? -->
+      <div class="concept-card" data-card="1">
+        <button class="concept-header" aria-expanded="true">
+          <span class="concept-num">1</span>
+          <span class="concept-title">What is the 8-Puzzle?</span>
+          <svg class="concept-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="concept-content">
+          <p>A <strong>3×3 sliding puzzle</strong> with 8 numbered tiles and one empty space. You slide tiles into the empty space to rearrange them into a target configuration.</p>
+          <div class="concept-grids-row">
+            <div class="concept-grid-block">
+              <span class="concept-grid-label">Initial State</span>
+              <div class="concept-mini-grid">
+                <div class="cm-tile">2</div><div class="cm-tile">8</div><div class="cm-tile">3</div>
+                <div class="cm-tile">1</div><div class="cm-tile">6</div><div class="cm-tile">4</div>
+                <div class="cm-tile">7</div><div class="cm-tile cm-empty"></div><div class="cm-tile">5</div>
+              </div>
+            </div>
+            <div class="concept-arrow">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+            <div class="concept-grid-block">
+              <span class="concept-grid-label">Goal State</span>
+              <div class="concept-mini-grid">
+                <div class="cm-tile">1</div><div class="cm-tile">2</div><div class="cm-tile">3</div>
+                <div class="cm-tile">8</div><div class="cm-tile cm-empty"></div><div class="cm-tile">4</div>
+                <div class="cm-tile">7</div><div class="cm-tile">6</div><div class="cm-tile">5</div>
+              </div>
+            </div>
+          </div>
+          <p class="concept-callout"><strong>Our problem:</strong> rearrange from the jumbled start to the target in the fewest moves.</p>
+        </div>
+      </div>
+
+      <!-- Card 2: What is a Heuristic? -->
+      <div class="concept-card" data-card="2">
+        <button class="concept-header" aria-expanded="true">
+          <span class="concept-num">2</span>
+          <span class="concept-title">What is a Heuristic?</span>
+          <svg class="concept-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="concept-content">
+          <p>A <strong>quick, educated guess</strong> about how close you are to your goal.</p>
+          <div class="concept-analogy">
+            <span class="analogy-label">Everyday Analogy</span>
+            <p>You're in <strong>Pune</strong>, driving to <strong>Mumbai</strong>. Straight-line distance is <strong>150 km</strong>. The actual road distance is 160–170 km. That 150 km estimate is your <em>heuristic</em> — it's always optimistic, never overestimates the real distance.</p>
+          </div>
+          <p><strong>Key property — Admissibility:</strong> A good heuristic <em>never overestimates</em> the true cost. This guarantees A* will find the optimal (shortest) solution.</p>
+        </div>
+      </div>
+
+      <!-- Card 3: Understanding g(n), h(n), and f(n) -->
+      <div class="concept-card" data-card="3">
+        <button class="concept-header" aria-expanded="true">
+          <span class="concept-num">3</span>
+          <span class="concept-title">Understanding g(n), h(n), and f(n)</span>
+          <svg class="concept-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="concept-content">
+          <div class="formula-showcase">
+            <span class="formula-showcase-f">f(n)</span>
+            <span class="formula-showcase-eq">=</span>
+            <span class="formula-showcase-g">g(n)</span>
+            <span class="formula-showcase-plus">+</span>
+            <span class="formula-showcase-h">h(n)</span>
+          </div>
+          <div class="ghf-breakdown">
+            <div class="ghf-item ghf-g">
+              <span class="ghf-symbol">g(n)</span>
+              <span class="ghf-label">Moves made so far</span>
+              <span class="ghf-analogy">Like your odometer — counts distance already travelled</span>
+            </div>
+            <div class="ghf-item ghf-h">
+              <span class="ghf-symbol">h(n)</span>
+              <span class="ghf-label">Estimated moves remaining</span>
+              <span class="ghf-analogy">Like GPS — "roughly this much left"</span>
+            </div>
+            <div class="ghf-item ghf-f">
+              <span class="ghf-symbol">f(n)</span>
+              <span class="ghf-label">Total estimated cost</span>
+              <span class="ghf-analogy">Full trip estimate = distance done + distance left</span>
+            </div>
+          </div>
+          <div class="concept-example">
+            <span class="example-label">Mini Example — Our Initial State</span>
+            <p><span class="highlight-g">g(n) = 0</span> (no moves yet), <span class="highlight-h">h(n) = 4</span> (tiles 2, 8, 1, 6 are misplaced), so <span class="highlight-f">f(n) = 0 + 4 = 4</span></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: The Misplaced Tiles Heuristic -->
+      <div class="concept-card" data-card="4">
+        <button class="concept-header" aria-expanded="true">
+          <span class="concept-num">4</span>
+          <span class="concept-title">The Misplaced Tiles Heuristic</span>
+          <svg class="concept-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="concept-content">
+          <p>Count how many tiles are <strong>NOT</strong> in their goal position (skip the blank).</p>
+          <div class="comparison-table-wrapper">
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th>Position</th>
+                  <th>Initial</th>
+                  <th>Goal</th>
+                  <th>Match?</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>[0,0]</td><td>2</td><td>1</td><td class="mismatch">✗ Misplaced</td></tr>
+                <tr><td>[0,1]</td><td>8</td><td>2</td><td class="mismatch">✗ Misplaced</td></tr>
+                <tr><td>[0,2]</td><td>3</td><td>3</td><td class="match">✓ Correct</td></tr>
+                <tr><td>[1,0]</td><td>1</td><td>8</td><td class="mismatch">✗ Misplaced</td></tr>
+                <tr><td>[1,1]</td><td>6</td><td>_</td><td class="mismatch">✗ Misplaced</td></tr>
+                <tr><td>[1,2]</td><td>4</td><td>4</td><td class="match">✓ Correct</td></tr>
+                <tr><td>[2,0]</td><td>7</td><td>7</td><td class="match">✓ Correct</td></tr>
+                <tr><td>[2,1]</td><td>_</td><td>6</td><td class="skip">— Blank (skip)</td></tr>
+                <tr><td>[2,2]</td><td>5</td><td>5</td><td class="match">✓ Correct</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="concept-callout"><strong>Misplaced: tiles 2, 8, 1, 6 → h(n) = 4</strong></p>
+          <p><strong>Why it's admissible:</strong> Each misplaced tile needs <em>at least one move</em> to fix, so this count never overestimates the actual number of moves needed.</p>
+        </div>
+      </div>
+
+      <!-- Card 5: What is A*? -->
+      <div class="concept-card" data-card="5">
+        <button class="concept-header" aria-expanded="true">
+          <span class="concept-num">5</span>
+          <span class="concept-title">What is A*?</span>
+          <svg class="concept-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="concept-content">
+          <p>A search algorithm that finds the <strong>optimal (shortest) path</strong> from start to goal.</p>
+          <ol class="astar-steps">
+            <li><strong>Start:</strong> Put the initial state in the OPEN list</li>
+            <li><strong>Pick:</strong> Select the state with the smallest f(n) from OPEN</li>
+            <li><strong>Check:</strong> Is it the goal? If yes, we're done!</li>
+            <li><strong>Expand:</strong> Generate all neighbor states (slide tiles into the blank). Add new ones to OPEN. Move the current state to CLOSED.</li>
+            <li><strong>Repeat:</strong> Go back to step 2</li>
+          </ol>
+          <p class="concept-callout">A* is smart because it uses <span class="highlight-f">f(n)</span> to prioritize the most promising states — balancing "moves already made" with "estimated moves remaining."</p>
+        </div>
+      </div>
+
+      <!-- Card 6: OPEN and CLOSED Lists -->
+      <div class="concept-card" data-card="6">
+        <button class="concept-header" aria-expanded="true">
+          <span class="concept-num">6</span>
+          <span class="concept-title">OPEN and CLOSED Lists</span>
+          <svg class="concept-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="concept-content">
+          <div class="lists-comparison">
+            <div class="list-explain open-explain">
+              <span class="list-badge open-badge">OPEN</span>
+              <strong>"To-Do List"</strong>
+              <p>States waiting to be explored. We always pick the one with the <em>lowest f(n)</em> next.</p>
+            </div>
+            <div class="list-explain closed-explain">
+              <span class="list-badge closed-badge">CLOSED</span>
+              <strong>"Done List"</strong>
+              <p>States already explored. Once a state is in CLOSED, we never revisit it.</p>
+            </div>
+          </div>
+          <div class="concept-analogy">
+            <span class="analogy-label">Restaurant Analogy</span>
+            <p>OPEN is the <strong>waitlist</strong> — the host seats the highest-priority customer (lowest f(n)) first. Once served, they go to the <strong>served list</strong> (CLOSED). You never re-serve someone already done.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Start Simulation Button -->
+      <div class="concepts-cta">
+        <button class="btn btn-start-sim" id="btnStartSim">
+          Start Simulation
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <kbd>S</kbd>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <main class="main" id="simulationSection">
     <!-- Left Column: Puzzle Grids -->
     <section class="puzzle-section">
       <div class="grids-row">
@@ -157,66 +356,5 @@
   </footer>
 
   <script src="./app.js"></script>
-<script data-pplx-inline-edit>
-(function(){
-  if(window===window.top)return;
-  function inlineAll(orig,clone){
-    if(orig.nodeType!==1)return;
-    try{
-      var cs=getComputedStyle(orig);
-      var t='';
-      for(var i=0;i<cs.length;i++){t+=cs[i]+':'+cs.getPropertyValue(cs[i])+';';}
-      clone.style.cssText=t;
-    }catch(e){}
-    var oc=orig.children,cc=clone.children;
-    for(var j=0;j<oc.length&&j<cc.length;j++){inlineAll(oc[j],cc[j]);}
-  }
-  function stripExternal(clone){
-    var imgs=clone.querySelectorAll('img');
-    for(var i=0;i<imgs.length;i++){
-      var s=imgs[i].getAttribute('src');
-      if(s&&!s.startsWith('data:'))imgs[i].removeAttribute('src');
-    }
-    var all=clone.querySelectorAll('*');
-    for(var i=0;i<all.length;i++){
-      var st=all[i].style.cssText;
-      if(st&&st.indexOf('url(')>=0){
-        all[i].style.cssText=st.replace(/url\(["']?(?!data:)[^)"']*["']?\)/gi,'none');
-      }
-    }
-  }
-  window.addEventListener('message',function(e){
-    if(!e.data||e.data.type!=='INLINE_EDIT_CAPTURE_REQUEST')return;
-    var scrollX=window.scrollX||window.pageXOffset||0;
-    var scrollY=window.scrollY||window.pageYOffset||0;
-    var w=window.innerWidth,h=window.innerHeight;
-    try{
-      var clone=document.documentElement.cloneNode(true);
-      var rm=clone.querySelectorAll('script,link[rel="stylesheet"],style');
-      for(var i=0;i<rm.length;i++){rm[i].remove();}
-      inlineAll(document.documentElement,clone);
-      stripExternal(clone);
-      var html=new XMLSerializer().serializeToString(clone);
-      var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'">'
-        +'<foreignObject width="100%" height="100%">'
-        +'<div xmlns="http://www.w3.org/1999/xhtml" style="width:'+w+'px;height:'+h+'px;overflow:hidden">'
-        +'<div style="transform:translate(-'+scrollX+'px,-'+scrollY+'px);transform-origin:top left">'
-        +html+'</div></div></foreignObject></svg>';
-      var svgUrl='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
-      var img=new Image();
-      img.onload=function(){
-        var c=document.createElement('canvas');c.width=w;c.height=h;
-        c.getContext('2d').drawImage(img,0,0);
-        window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:c.toDataURL('image/png'),scrollX:scrollX,scrollY:scrollY},'*');
-      };
-      img.onerror=function(){
-        window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:null,scrollX:scrollX,scrollY:scrollY},'*');
-      };
-      img.src=svgUrl;
-    }catch(err){
-      window.parent.postMessage({type:'INLINE_EDIT_SCREENSHOT_RESULT',dataUrl:null,scrollX:scrollX,scrollY:scrollY},'*');
-    }
-  });
-})();
-</script></body>
+</body>
 </html>
