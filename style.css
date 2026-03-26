@@ -113,6 +113,7 @@ html {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -124,6 +125,7 @@ body {
   background-color: var(--color-bg);
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 button { cursor: pointer; background: none; border: none; font: inherit; color: inherit; }
@@ -1205,19 +1207,27 @@ a, button { transition: color var(--transition-interactive), background var(--tr
   opacity: 0.8;
 }
 
-/* ===== Responsive — Concepts ===== */
+/* ============================================================
+   RESPONSIVE DESIGN
+   ============================================================ */
+
+/* --- Tablet & Small Desktop (≤ 960px) --- */
 @media (max-width: 960px) {
   .main {
     grid-template-columns: 1fr;
     padding: var(--space-4);
   }
-  .state-panel { order: 2; }
+
+  .state-panel {
+    order: 2;
+  }
 
   .concepts-section {
     padding: var(--space-3) var(--space-4) 0;
   }
 }
 
+/* --- Small Tablets & Large Phones (≤ 700px) --- */
 @media (max-width: 700px) {
   .ghf-breakdown {
     grid-template-columns: 1fr;
@@ -1263,21 +1273,210 @@ a, button { transition: color var(--transition-interactive), background var(--tr
   .concept-grids-row {
     gap: var(--space-3);
   }
+
+  /* Header goes stacked */
+  .header {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .header-inner {
+    flex-direction: row;
+    gap: var(--space-2);
+  }
+
+  .site-title {
+    font-size: clamp(0.9rem, 3vw, 1.25rem);
+  }
+
+  .site-subtitle {
+    font-size: clamp(0.65rem, 2vw, 0.8rem);
+  }
 }
 
+/* --- Mobile (≤ 600px) --- */
 @media (max-width: 600px) {
-  .grids-row { gap: var(--space-3); }
-  .puzzle-grid { width: 160px; height: 160px; }
-  .tile { font-size: 1.3rem; }
-  .controls { flex-direction: column; align-items: stretch; }
-  .btn { justify-content: center; }
-  .arrow-between { padding-top: 0; transform: rotate(90deg); }
-  .arrow-between svg { width: 28px; height: 28px; }
-  .header-inner { flex-direction: column; gap: var(--space-2); text-align: center; }
-  .logo-area { flex-direction: column; }
+  /* Header stacks on small screens */
+  .header-inner {
+    flex-direction: column;
+    gap: var(--space-2);
+    text-align: center;
+  }
+
+  .logo-area {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .logo-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .site-title {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .site-subtitle {
+    font-size: 0.7rem;
+    text-align: center;
+  }
+
+  [data-theme-toggle] {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+  }
+
+  .header {
+    position: relative;
+    padding: var(--space-3);
+  }
+
+  /* Main layout adjustments */
+  .main {
+    padding: var(--space-3);
+    gap: var(--space-4);
+  }
+
+  /* Puzzle grids row — stack vertically */
+  .grids-row {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .puzzle-grid {
+    width: min(210px, 55vw);
+    height: min(210px, 55vw);
+  }
+
+  .tile {
+    font-size: clamp(1.1rem, 4vw, 1.75rem);
+  }
+
+  .arrow-between {
+    padding-top: 0;
+    transform: rotate(90deg);
+  }
+
+  .arrow-between svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* Controls become full-width stacked */
+  .controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+
+  .btn {
+    justify-content: center;
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-sm);
+    min-height: 44px; /* Touch-friendly minimum */
+  }
+
+  /* Hide keyboard shortcut badges on mobile */
+  .btn kbd {
+    display: none;
+  }
+
+  .btn-start-sim kbd {
+    display: none;
+  }
+
+  /* Cost display */
+  .cost-display {
+    font-size: clamp(0.7rem, 2.5vw, 0.875rem);
+    padding: var(--space-2) var(--space-3);
+  }
+
+  /* Step counter */
+  .step-counter {
+    font-size: var(--text-xs);
+  }
+
+  .progress-bar {
+    max-width: 100%;
+  }
+
+  /* Explanation panel */
+  .explanation-panel {
+    padding: var(--space-3) var(--space-4);
+    margin-top: var(--space-4);
+  }
+
+  .explanation-text {
+    font-size: var(--text-xs);
+    line-height: 1.6;
+  }
+
+  /* State Panel — cards spacing */
+  .state-panel {
+    gap: var(--space-3);
+  }
+
+  .info-card {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .info-card h3 {
+    font-size: var(--text-xs);
+  }
+
+  .formula {
+    font-size: var(--text-base);
+    padding: var(--space-2);
+  }
+
+  .formula-legend {
+    font-size: 0.7rem;
+  }
+
+  .list-content {
+    max-height: 150px;
+  }
+
+  .list-item {
+    font-size: 0.65rem;
+    padding: var(--space-1);
+  }
+
+  .list-item .mini-grid {
+    width: 30px;
+    height: 30px;
+  }
+
+  .mini-grid .mini-tile {
+    font-size: 0.4rem;
+  }
+
+  .move-history {
+    max-height: 150px;
+  }
+
+  .move-item {
+    font-size: 0.7rem;
+  }
+
+  .move-item .move-num {
+    width: 18px;
+    height: 18px;
+    font-size: 0.55rem;
+  }
+
+  /* Concepts toggle */
+  .concepts-section {
+    padding: var(--space-2) var(--space-3) 0;
+  }
 
   .concepts-toggle {
     padding: var(--space-3) var(--space-4);
+    gap: var(--space-2);
   }
 
   .concepts-toggle-text {
@@ -1289,9 +1488,250 @@ a, button { transition: color var(--transition-interactive), background var(--tr
     height: 30px;
   }
 
+  .concepts-toggle-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Concept cards */
+  .concept-card {
+    margin-bottom: var(--space-2);
+  }
+
+  .concept-num {
+    width: 24px;
+    height: 24px;
+    font-size: 0.7rem;
+  }
+
+  .concept-title {
+    font-size: var(--text-sm);
+  }
+
+  .concept-content {
+    font-size: var(--text-xs);
+    line-height: 1.6;
+    padding: 0 var(--space-3) var(--space-3);
+  }
+
+  .concept-callout {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-xs);
+  }
+
+  .concept-analogy {
+    padding: var(--space-3);
+  }
+
+  .concept-analogy p {
+    font-size: var(--text-xs);
+  }
+
+  .concept-example {
+    padding: var(--space-3);
+  }
+
+  .concept-example p {
+    font-size: var(--text-xs);
+  }
+
+  /* Concept grids need to be smaller */
+  .concept-mini-grid {
+    width: 90px;
+    height: 90px;
+  }
+
+  .cm-tile {
+    font-size: 0.8rem;
+  }
+
+  .concept-arrow svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* A* steps list */
+  .astar-steps li {
+    padding: var(--space-2);
+    font-size: var(--text-xs);
+    gap: var(--space-2);
+  }
+
+  .astar-steps li::before {
+    min-width: 20px;
+    height: 20px;
+    font-size: 0.6rem;
+  }
+
+  /* Comparison table */
+  .comparison-table th {
+    padding: var(--space-1) var(--space-2);
+    font-size: 0.6rem;
+  }
+
+  .comparison-table td {
+    padding: var(--space-1) var(--space-2);
+    font-size: 0.7rem;
+  }
+
+  /* Start simulation CTA */
   .btn-start-sim {
     width: 100%;
     justify-content: center;
     padding: var(--space-4) var(--space-5);
+  }
+
+  .concepts-cta {
+    padding: var(--space-4) 0 var(--space-2);
+  }
+
+  /* Footer */
+  .footer {
+    padding: var(--space-3) var(--space-4);
+    font-size: 0.7rem;
+  }
+}
+
+/* --- Very Small Phones (≤ 400px) --- */
+@media (max-width: 400px) {
+  .main {
+    padding: var(--space-2);
+  }
+
+  .puzzle-grid {
+    width: min(160px, 48vw);
+    height: min(160px, 48vw);
+  }
+
+  .tile {
+    font-size: 1rem;
+  }
+
+  .grid-label {
+    font-size: 0.7rem;
+  }
+
+  .site-title {
+    font-size: 0.85rem;
+  }
+
+  .site-subtitle {
+    font-size: 0.6rem;
+  }
+
+  .concept-mini-grid {
+    width: 75px;
+    height: 75px;
+  }
+
+  .cm-tile {
+    font-size: 0.7rem;
+  }
+
+  .formula-showcase-f,
+  .formula-showcase-g,
+  .formula-showcase-h {
+    font-size: 1.2rem;
+  }
+
+  .formula-showcase-eq,
+  .formula-showcase-plus {
+    font-size: 1rem;
+  }
+
+  .concept-title {
+    font-size: var(--text-xs);
+  }
+
+  .concepts-toggle-text {
+    font-size: var(--text-sm);
+  }
+
+  .btn {
+    font-size: var(--text-xs);
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .btn-start-sim {
+    font-size: var(--text-sm);
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .explanation-panel {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .info-card {
+    padding: var(--space-2) var(--space-3);
+  }
+}
+
+/* --- Touch device optimizations --- */
+@media (hover: none) and (pointer: coarse) {
+  /* Enlarge tap targets */
+  .btn {
+    min-height: 48px;
+  }
+
+  .concept-header {
+    min-height: 48px;
+  }
+
+  .concepts-toggle {
+    min-height: 48px;
+  }
+
+  [data-theme-toggle] {
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Hide keyboard shortcuts on touch */
+  kbd {
+    display: none !important;
+  }
+
+  /* Prevent double-tap zoom on buttons */
+  .btn,
+  .concept-header,
+  .concepts-toggle,
+  [data-theme-toggle] {
+    touch-action: manipulation;
+  }
+}
+
+/* --- Landscape mode on phones --- */
+@media (max-height: 500px) and (orientation: landscape) {
+  .header {
+    padding: var(--space-2) var(--space-4);
+    position: relative; /* unstick on landscape for more space */
+  }
+
+  .main {
+    padding: var(--space-2) var(--space-4);
+  }
+
+  .grids-row {
+    flex-direction: row;
+    gap: var(--space-4);
+  }
+
+  .puzzle-grid {
+    width: min(160px, 30vh);
+    height: min(160px, 30vh);
+  }
+
+  .arrow-between {
+    transform: none;
+    padding-top: 2rem;
+  }
+
+  .controls {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 }
