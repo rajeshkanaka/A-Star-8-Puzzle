@@ -21,14 +21,14 @@
     const col = blank % 3;
     const moves = [];
 
-    // Up
-    if (row > 0) moves.push({ dir: 'Up', pos: blank - 3 });
-    // Down
-    if (row < 2) moves.push({ dir: 'Down', pos: blank + 3 });
-    // Left
-    if (col > 0) moves.push({ dir: 'Left', pos: blank - 1 });
-    // Right
-    if (col < 2) moves.push({ dir: 'Right', pos: blank + 1 });
+    // Blank moves up → tile above slides DOWN into blank
+    if (row > 0) moves.push({ dir: 'Down', pos: blank - 3 });
+    // Blank moves down → tile below slides UP into blank
+    if (row < 2) moves.push({ dir: 'Up', pos: blank + 3 });
+    // Blank moves left → tile at left slides RIGHT into blank
+    if (col > 0) moves.push({ dir: 'Right', pos: blank - 1 });
+    // Blank moves right → tile at right slides LEFT into blank
+    if (col < 2) moves.push({ dir: 'Left', pos: blank + 1 });
 
     return moves.map(m => {
       const next = state.slice();
