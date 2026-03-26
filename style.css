@@ -620,27 +620,6 @@ a, button { transition: color var(--transition-interactive), background var(--tr
 }
 .footer a:hover { color: var(--color-primary); text-decoration: underline; }
 
-/* ===== Responsive ===== */
-@media (max-width: 960px) {
-  .main {
-    grid-template-columns: 1fr;
-    padding: var(--space-4);
-  }
-  .state-panel { order: 2; }
-}
-
-@media (max-width: 600px) {
-  .grids-row { gap: var(--space-3); }
-  .puzzle-grid { width: 160px; height: 160px; }
-  .tile { font-size: 1.3rem; }
-  .controls { flex-direction: column; align-items: stretch; }
-  .btn { justify-content: center; }
-  .arrow-between { padding-top: 0; transform: rotate(90deg); }
-  .arrow-between svg { width: 28px; height: 28px; }
-  .header-inner { flex-direction: column; gap: var(--space-2); text-align: center; }
-  .logo-area { flex-direction: column; }
-}
-
 /* ===== Scrollbar ===== */
 .list-content::-webkit-scrollbar, .move-history::-webkit-scrollbar { width: 4px; }
 .list-content::-webkit-scrollbar-track, .move-history::-webkit-scrollbar-track { background: transparent; }
@@ -671,3 +650,648 @@ a, button { transition: color var(--transition-interactive), background var(--tr
 .puzzle-grid.solved .tile:nth-child(7) { animation-delay: 300ms; }
 .puzzle-grid.solved .tile:nth-child(8) { animation-delay: 350ms; }
 .puzzle-grid.solved .tile:nth-child(9) { animation-delay: 400ms; }
+
+
+/* ============================================================
+   CONCEPTS SECTION — "Learn the Basics First"
+   ============================================================ */
+
+.concepts-section {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-6) 0;
+  width: 100%;
+}
+
+/* ===== Toggle Bar ===== */
+.concepts-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  transition: all var(--transition-interactive);
+  text-align: left;
+}
+
+.concepts-toggle:hover {
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary);
+}
+
+.concepts-toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.concepts-toggle-text {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-text);
+  flex: 1;
+}
+
+.concepts-toggle-hint {
+  font-size: var(--text-xs);
+  color: var(--color-text-faint);
+  display: none;
+}
+
+.concepts-section.collapsed .concepts-toggle-hint {
+  display: inline;
+}
+
+.concepts-chevron {
+  color: var(--color-text-muted);
+  transition: transform 300ms ease;
+  flex-shrink: 0;
+}
+
+.concepts-section.collapsed .concepts-chevron {
+  transform: rotate(-90deg);
+}
+
+/* ===== Concepts Body ===== */
+.concepts-body {
+  overflow: hidden;
+  transition: max-height 500ms cubic-bezier(0.16, 1, 0.3, 1), opacity 300ms ease, padding 300ms ease;
+  max-height: 5000px;
+  opacity: 1;
+  padding-top: var(--space-4);
+}
+
+.concepts-section.collapsed .concepts-body {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+}
+
+.concepts-intro {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-4);
+  line-height: 1.6;
+}
+
+/* ===== Concept Cards ===== */
+.concept-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--space-3);
+  overflow: hidden;
+  transition: box-shadow var(--transition-interactive);
+}
+
+.concept-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.concept-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--transition-interactive);
+}
+
+.concept-header:hover {
+  background: var(--color-surface-2);
+}
+
+.concept-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+}
+
+.concept-title {
+  flex: 1;
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.concept-chevron {
+  color: var(--color-text-muted);
+  transition: transform 300ms ease;
+  flex-shrink: 0;
+}
+
+.concept-card.collapsed .concept-chevron {
+  transform: rotate(-90deg);
+}
+
+/* ===== Card Content ===== */
+.concept-content {
+  padding: 0 var(--space-5) var(--space-5);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  color: var(--color-text);
+  overflow: hidden;
+  transition: max-height 400ms cubic-bezier(0.16, 1, 0.3, 1), opacity 250ms ease, padding 300ms ease;
+  max-height: 2000px;
+  opacity: 1;
+}
+
+.concept-card.collapsed .concept-content {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.concept-content p {
+  margin-bottom: var(--space-3);
+}
+
+.concept-content p:last-child {
+  margin-bottom: 0;
+}
+
+.concept-content strong {
+  color: var(--color-text);
+}
+
+.concept-content .highlight-g { color: var(--color-g); font-weight: 600; font-family: var(--font-mono); }
+.concept-content .highlight-h { color: var(--color-h); font-weight: 600; font-family: var(--font-mono); }
+.concept-content .highlight-f { color: var(--color-f); font-weight: 700; font-family: var(--font-mono); }
+
+/* ===== Concept Mini Grids (Card 1) ===== */
+.concept-grids-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-5);
+  margin: var(--space-4) 0;
+  flex-wrap: wrap;
+}
+
+.concept-grid-block {
+  text-align: center;
+}
+
+.concept-grid-label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-2);
+}
+
+.concept-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  width: 120px;
+  height: 120px;
+  background: var(--color-border);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.cm-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: var(--color-tile);
+  color: var(--color-tile-text);
+}
+
+.cm-tile.cm-empty {
+  background: var(--color-surface-2);
+  color: transparent;
+}
+
+.concept-arrow {
+  color: var(--color-text-faint);
+  flex-shrink: 0;
+}
+
+/* ===== Concept Callout ===== */
+.concept-callout {
+  background: var(--color-primary-light);
+  border-left: 3px solid var(--color-primary);
+  padding: var(--space-3) var(--space-4);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-size: var(--text-sm);
+  margin-top: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+/* ===== Analogy Box ===== */
+.concept-analogy {
+  background: var(--color-warning-light);
+  border: 1px solid var(--color-warning);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin: var(--space-3) 0;
+}
+
+.analogy-label {
+  display: inline-block;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-warning);
+  margin-bottom: var(--space-2);
+}
+
+.concept-analogy p {
+  margin-bottom: 0;
+  font-size: var(--text-sm);
+  line-height: 1.65;
+}
+
+/* ===== Formula Showcase (Card 3) ===== */
+.formula-showcase {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-4);
+  background: var(--color-surface-2);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-4);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  flex-wrap: wrap;
+}
+
+.formula-showcase-f {
+  font-size: 2rem;
+  color: var(--color-f);
+}
+.formula-showcase-eq {
+  font-size: 1.5rem;
+  color: var(--color-text-muted);
+}
+.formula-showcase-g {
+  font-size: 2rem;
+  color: var(--color-g);
+}
+.formula-showcase-plus {
+  font-size: 1.5rem;
+  color: var(--color-text-muted);
+}
+.formula-showcase-h {
+  font-size: 2rem;
+  color: var(--color-h);
+}
+
+/* ===== g/h/f Breakdown (Card 3) ===== */
+.ghf-breakdown {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.ghf-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.ghf-symbol {
+  font-family: var(--font-mono);
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: var(--space-1);
+}
+
+.ghf-g .ghf-symbol { color: var(--color-g); }
+.ghf-h .ghf-symbol { color: var(--color-h); }
+.ghf-f .ghf-symbol { color: var(--color-f); }
+
+.ghf-label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--space-1);
+}
+
+.ghf-analogy {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* ===== Example Box (Card 3) ===== */
+.concept-example {
+  background: var(--color-accent-light);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+}
+
+.example-label {
+  display: inline-block;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-accent);
+  margin-bottom: var(--space-2);
+}
+
+.concept-example p {
+  margin-bottom: 0;
+}
+
+/* ===== Comparison Table (Card 4) ===== */
+.comparison-table-wrapper {
+  overflow-x: auto;
+  margin: var(--space-3) 0;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-xs);
+  font-family: var(--font-mono);
+}
+
+.comparison-table th {
+  background: var(--color-surface-2);
+  padding: var(--space-2) var(--space-3);
+  font-weight: 700;
+  text-align: left;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.7rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.comparison-table td {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-divider);
+  color: var(--color-text);
+}
+
+.comparison-table tr:last-child td {
+  border-bottom: none;
+}
+
+.comparison-table .match {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.comparison-table .mismatch {
+  color: var(--color-error);
+  font-weight: 600;
+}
+
+.comparison-table .skip {
+  color: var(--color-text-faint);
+  font-style: italic;
+}
+
+/* ===== A* Steps List (Card 5) ===== */
+.astar-steps {
+  list-style: none;
+  counter-reset: astar;
+  margin: var(--space-3) 0;
+  padding: 0;
+}
+
+.astar-steps li {
+  counter-increment: astar;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  margin-bottom: var(--space-2);
+  background: var(--color-surface-2);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.astar-steps li::before {
+  content: counter(astar);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  margin-top: 1px;
+}
+
+/* ===== Lists Comparison (Card 6) ===== */
+.lists-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.list-explain {
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.list-explain strong {
+  font-size: var(--text-sm);
+  color: var(--color-text);
+}
+
+.list-explain p {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+
+.open-explain {
+  background: var(--color-primary-light);
+  border: 1px solid var(--color-primary);
+}
+
+.open-explain .list-badge { margin-bottom: var(--space-1); }
+
+.closed-explain {
+  background: var(--color-accent-light);
+  border: 1px solid var(--color-accent);
+}
+
+.closed-explain .list-badge { margin-bottom: var(--space-1); }
+
+/* ===== Start Simulation CTA ===== */
+.concepts-cta {
+  text-align: center;
+  padding: var(--space-6) 0 var(--space-2);
+}
+
+.btn-start-sim {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--text-base);
+  font-weight: 700;
+  border-radius: var(--radius-lg);
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  transition: all var(--transition-interactive);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-start-sim:hover {
+  background: var(--color-accent-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-start-sim kbd {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.2);
+  border: 1px solid rgba(255,255,255,0.2);
+  opacity: 0.8;
+}
+
+/* ===== Responsive — Concepts ===== */
+@media (max-width: 960px) {
+  .main {
+    grid-template-columns: 1fr;
+    padding: var(--space-4);
+  }
+  .state-panel { order: 2; }
+
+  .concepts-section {
+    padding: var(--space-3) var(--space-4) 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .ghf-breakdown {
+    grid-template-columns: 1fr;
+  }
+
+  .lists-comparison {
+    grid-template-columns: 1fr;
+  }
+
+  .formula-showcase {
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-3);
+  }
+
+  .formula-showcase-f,
+  .formula-showcase-g,
+  .formula-showcase-h {
+    font-size: 1.5rem;
+  }
+
+  .formula-showcase-eq,
+  .formula-showcase-plus {
+    font-size: 1.2rem;
+  }
+
+  .concept-header {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .concept-content {
+    padding: 0 var(--space-4) var(--space-4);
+  }
+
+  .concept-mini-grid {
+    width: 100px;
+    height: 100px;
+  }
+
+  .cm-tile {
+    font-size: 0.9rem;
+  }
+
+  .concept-grids-row {
+    gap: var(--space-3);
+  }
+}
+
+@media (max-width: 600px) {
+  .grids-row { gap: var(--space-3); }
+  .puzzle-grid { width: 160px; height: 160px; }
+  .tile { font-size: 1.3rem; }
+  .controls { flex-direction: column; align-items: stretch; }
+  .btn { justify-content: center; }
+  .arrow-between { padding-top: 0; transform: rotate(90deg); }
+  .arrow-between svg { width: 28px; height: 28px; }
+  .header-inner { flex-direction: column; gap: var(--space-2); text-align: center; }
+  .logo-area { flex-direction: column; }
+
+  .concepts-toggle {
+    padding: var(--space-3) var(--space-4);
+  }
+
+  .concepts-toggle-text {
+    font-size: var(--text-base);
+  }
+
+  .concepts-toggle-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .btn-start-sim {
+    width: 100%;
+    justify-content: center;
+    padding: var(--space-4) var(--space-5);
+  }
+}

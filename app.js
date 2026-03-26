@@ -49,6 +49,36 @@
 
   function isGoal(state) { return stateKey(state) === stateKey(GOAL); }
 
+  // ===== Helper: list misplaced tile numbers =====
+  function getMisplacedTiles(state) {
+    const tiles = [];
+    for (let i = 0; i < 9; i++) {
+      if (state[i] !== 0 && state[i] !== GOAL[i]) tiles.push(state[i]);
+    }
+    return tiles;
+  }
+
+  // ===== Helper: describe blank position =====
+  function blankPosDesc(state) {
+    const b = findBlank(state);
+    const row = Math.floor(b / 3);
+    const col = b % 3;
+    return `[${row},${col}]`;
+  }
+
+  // ===== Helper: describe which tiles can slide =====
+  function describeSlideable(state) {
+    const blank = findBlank(state);
+    const row = Math.floor(blank / 3);
+    const col = blank % 3;
+    const parts = [];
+    if (row > 0) parts.push(`tile ${state[blank - 3]} (above blank, slide Down)`);
+    if (row < 2) parts.push(`tile ${state[blank + 3]} (below blank, slide Up)`);
+    if (col > 0) parts.push(`tile ${state[blank - 1]} (left of blank, slide Right)`);
+    if (col < 2) parts.push(`tile ${state[blank + 1]} (right of blank, slide Left)`);
+    return parts;
+  }
+
   // ===== Pre-compute the A* Solution =====
   // We record every "algorithm step" so we can replay it
   function solveAStar() {
@@ -72,7 +102,9 @@
       movedTile: null
     });
 
-    // Step 0: Initial state
+    const misplacedStart = getMisplacedTiles(INITIAL);
+
+    // Step 0: Initial state — ENHANCED explanation
     steps.push({
       type: 'init',
       currentState: INITIAL,
@@ -80,11 +112,14 @@
       openSnapshot: openList.map(n => ({ ...n })),
       closedSnapshot: [],
       explanation: `<strong>Step 1 — Initialize:</strong> We place the <strong>initial state</strong> into the OPEN list. ` +
-        `The blank tile is at position [2,1] (row 2, column 1, counting from 0).<br><br>` +
+        `The blank tile is at position ${blankPosDesc(INITIAL)} (row ${Math.floor(findBlank(INITIAL)/3)}, column ${findBlank(INITIAL)%3}, counting from 0).<br><br>` +
+        `<strong>Let's calculate h(n):</strong> Comparing each position to the goal — ` +
+        `tiles <strong>${misplacedStart.join(', ')}</strong> are not in their correct positions, ` +
+        `so <span class="highlight-h">h(n) = ${h0}</span> misplaced tiles.<br><br>` +
         `We calculate: <span class="highlight-g">g(n) = 0</span> (no moves yet), ` +
-        `<span class="highlight-h">h(n) = ${h0}</span> (${h0} tiles are not in their goal position), ` +
+        `<span class="highlight-h">h(n) = ${h0}</span>, ` +
         `so <span class="highlight-f">f(n) = 0 + ${h0} = ${h0}</span>.<br><br>` +
-        `The OPEN list now has 1 state. The CLOSED list is empty.`
+        `The OPEN list now has 1 state. The CLOSED list is empty. A* will next pick the state with the lowest f(n) from OPEN.`
     });
 
     let found = false;
@@ -106,7 +141,7 @@
         closedArr.push({ state: s, g: gScores[k], h: heuristic(s), f: gScores[k] + heuristic(s), key: k });
       });
 
-      // Step: Pick from OPEN
+      // Step: Pick from OPEN — ENHANCED explanation
       steps.push({
         type: 'pick',
         currentState: current.state,
@@ -127,6 +162,8 @@
           key = parents[key].parentKey;
         }
 
+        // ENHANCED solved explanation
+        const totalExplored = closedArr.length;
         steps.push({
           type: 'solved',
           currentState: current.state,
@@ -134,11 +171,12 @@
           openSnapshot: openList.filter(n => !closedSet.has(n.key)).map(n => ({ ...n })),
           closedSnapshot: closedArr,
           path: path,
-          explanation: `<strong>Goal Reached!</strong> The current state matches the goal state. ` +
-            `<span class="highlight-h">h(n) = 0</span> — all tiles are in their correct positions.<br><br>` +
-            `Total moves: <span class="highlight-g">${current.g}</span>. ` +
-            `The A* algorithm found the optimal path because the misplaced tiles heuristic is admissible ` +
-            `(it never overestimates the true cost).`
+          explanation: `<strong>🎉 Goal Reached!</strong> The current state matches the goal state — ` +
+            `<span class="highlight-h">h(n) = 0</span> means <strong>zero misplaced tiles</strong>. Every tile is exactly where it should be!<br><br>` +
+            `The solution took <span class="highlight-g">${current.g} moves</span> and A* explored only ` +
+            `<strong>${totalExplored} states</strong> total (much less than trying all possibilities blindly).<br><br>` +
+            `<strong>Why is this optimal?</strong> The misplaced tiles heuristic is <em>admissible</em> — it never overestimates the true cost. ` +
+            `A* with an admissible heuristic is guaranteed to find the shortest solution path.`
         });
         found = true;
         break;
@@ -174,7 +212,7 @@
         }
       }
 
-      // Step: Expand
+      // Step: Expand — ENHANCED explanation
       const updatedClosedArr = [];
       closedSet.forEach(k => {
         const s = k.split(',').map(Number);
@@ -188,7 +226,7 @@
         neighbors: newNeighbors,
         openSnapshot: openList.filter(n => !closedSet.has(n.key)).map(n => ({ ...n })),
         closedSnapshot: updatedClosedArr,
-        explanation: generateExpandExplanation(current, newNeighbors, openList.filter(n => !closedSet.has(n.key)))
+        explanation: generateExpandExplanation(current, neighbors, newNeighbors, openList.filter(n => !closedSet.has(n.key)), closedSet)
       });
     }
 
@@ -202,39 +240,66 @@
     return steps;
   }
 
+  // ENHANCED pick explanation
   function generatePickExplanation(current, openAfter, closedArr) {
     const moveDesc = current.move
       ? `We moved tile <span class="highlight-move">${current.movedTile}</span> <span class="highlight-move">${current.move}</span> (swapped with the blank).`
       : '';
 
     const openRemaining = openAfter.filter(n => true).length;
+    const misplaced = getMisplacedTiles(current.state);
+    const misplacedDesc = misplaced.length > 0
+      ? `Tiles <strong>${misplaced.join(', ')}</strong> are still misplaced.`
+      : `All tiles are in their correct positions!`;
 
-    return `<strong>Pick from OPEN:</strong> We select the state with the <strong>smallest f(n)</strong> from the OPEN list and move it to CLOSED.<br><br>` +
+    return `<strong>Pick from OPEN:</strong> A* always picks the state with the <strong>smallest f(n)</strong> because this state looks most promising — it has the best balance of "moves already made" and "estimated moves remaining."<br><br>` +
       `${moveDesc ? moveDesc + '<br><br>' : ''}` +
       `For this state: <span class="highlight-g">g(n) = ${current.g}</span> (${current.g} move${current.g !== 1 ? 's' : ''} from start), ` +
       `<span class="highlight-h">h(n) = ${current.h}</span> (${current.h} misplaced tile${current.h !== 1 ? 's' : ''}), ` +
-      `<span class="highlight-f">f(n) = ${current.g} + ${current.h} = ${current.f}</span>.<br><br>` +
+      `<span class="highlight-f">f(n) = ${current.g} + ${current.h} = ${current.f}</span>. ${misplacedDesc}<br><br>` +
       `OPEN has ${openRemaining} state${openRemaining !== 1 ? 's' : ''} remaining. CLOSED has ${closedArr.length} state${closedArr.length !== 1 ? 's' : ''}.`;
   }
 
-  function generateExpandExplanation(current, newNeighbors, openAfter) {
+  // ENHANCED expand explanation — now receives ALL neighbors (including skipped) for full context
+  function generateExpandExplanation(current, allNeighbors, newNeighbors, openAfter, closedSet) {
+    const slideable = describeSlideable(current.state);
+    const skippedCount = allNeighbors.length - newNeighbors.length;
+
+    let skippedDesc = '';
+    if (skippedCount > 0) {
+      // Find which neighbors were skipped (already in CLOSED)
+      const skippedNeighbors = allNeighbors.filter(nb => {
+        const nbKey = stateKey(nb.state);
+        return closedSet.has(nbKey);
+      });
+      if (skippedNeighbors.length > 0) {
+        skippedDesc = `<br><br><strong>${skippedNeighbors.length} neighbor${skippedNeighbors.length > 1 ? 's were' : ' was'} skipped</strong> — ` +
+          `already in CLOSED (${skippedNeighbors.map(n => `tile ${n.movedTile} ${n.move}`).join(', ')}). ` +
+          `A* never revisits states already explored.`;
+      }
+    }
+
     if (newNeighbors.length === 0) {
-      return `<strong>Expand:</strong> We try to generate new states by sliding tiles into the blank position, ` +
-        `but all possible neighbors are already in the CLOSED list (already visited). No new states added to OPEN.`;
+      return `<strong>Expand:</strong> The blank is at position ${blankPosDesc(current.state)}. ` +
+        `Tiles that can slide: ${slideable.join('; ')}.<br><br>` +
+        `However, all possible neighbors are already in the CLOSED list (already visited). ` +
+        `No new states added to OPEN.${skippedDesc}`;
     }
 
     const neighborDescs = newNeighbors.map(nb => {
+      const misplaced = getMisplacedTiles(nb.state);
       return `Move tile <span class="highlight-move">${nb.movedTile}</span> <span class="highlight-move">${nb.move}</span>: ` +
-        `<span class="highlight-g">g=${nb.g}</span>, <span class="highlight-h">h=${nb.h}</span>, ` +
+        `<span class="highlight-g">g=${nb.g}</span>, <span class="highlight-h">h=${nb.h}</span> (${misplaced.length > 0 ? 'tiles ' + misplaced.join(',') + ' misplaced' : 'all correct!'}), ` +
         `<span class="highlight-f">f=${nb.f}</span>`;
     });
 
-    return `<strong>Expand:</strong> We generate new states by sliding tiles into the blank position. ` +
-      `States already in CLOSED are skipped.<br><br>` +
-      `New states added to OPEN:<br>` +
+    return `<strong>Expand:</strong> The blank is at position ${blankPosDesc(current.state)}. ` +
+      `Tiles that can slide into the blank: ${slideable.join('; ')}.<br><br>` +
+      `States already in CLOSED are skipped.${skippedDesc}<br><br>` +
+      `<strong>New states added to OPEN:</strong><br>` +
       neighborDescs.map(d => `&nbsp;&nbsp;• ${d}`).join('<br>') +
       `<br><br>OPEN now has <strong>${openAfter.length}</strong> state${openAfter.length !== 1 ? 's' : ''} to explore. ` +
-      `Next, we'll pick the one with the smallest f(n).`;
+      `Next, A* will pick the one with the smallest f(n).`;
   }
 
   // ===== Pre-compute =====
@@ -496,5 +561,56 @@
   // ===== Initialize =====
   renderGoalGrid();
   renderStep(0);
+
+
+  // ============================================================
+  //  CONCEPTS SECTION — Expand/Collapse Logic
+  // ============================================================
+
+  const conceptsSection = document.getElementById('conceptsSection');
+  const conceptsToggle = document.getElementById('conceptsToggle');
+  const conceptsBody = document.getElementById('conceptsBody');
+  const btnStartSim = document.getElementById('btnStartSim');
+
+  // Concepts start expanded by default
+
+  // --- Toggle entire section ---
+  conceptsToggle.addEventListener('click', () => {
+    const isCollapsed = conceptsSection.classList.toggle('collapsed');
+    conceptsToggle.setAttribute('aria-expanded', !isCollapsed);
+    // State stored in DOM class only
+  });
+
+  // --- Individual card expand/collapse ---
+  document.querySelectorAll('.concept-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const card = header.closest('.concept-card');
+      const isCollapsed = card.classList.toggle('collapsed');
+      header.setAttribute('aria-expanded', !isCollapsed);
+    });
+  });
+
+  // --- "Start Simulation" button ---
+  btnStartSim.addEventListener('click', () => {
+    // Collapse the concepts section
+    conceptsSection.classList.add('collapsed');
+    conceptsToggle.setAttribute('aria-expanded', 'false');
+    // Smooth scroll to the simulation
+    const simSection = document.getElementById('simulationSection');
+    setTimeout(() => {
+      simSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  });
+
+  // --- Keyboard shortcut: S key to start simulation ---
+  document.addEventListener('keydown', (e) => {
+    if ((e.key === 's' || e.key === 'S') && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+      // Only trigger if concepts section is expanded
+      if (!conceptsSection.classList.contains('collapsed')) {
+        e.preventDefault();
+        btnStartSim.click();
+      }
+    }
+  });
 
 })();
